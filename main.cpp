@@ -149,23 +149,25 @@ typedef struct Instruction {
     Register arithmetic_target;
 };
 
+uint8_t exec_ADD(Registers *r, uint8_t value) {
+    //TODO: Implement overflow addition
+    uint8_t result = r->register_t[A] + value;    
+
+    return result; 
+}
+
 void execute_instruction(Registers *r, Instruction *i) {
     switch (i->opc) {
-        case ADD:
+        case ADD: {
             uint8_t value = r->register_t[i->arithmetic_target];
             uint8_t result = exec_ADD(r, value);
             r->register_t[A] = result;
             break;
-        
+        }
+            
         default:
             break;
     }
-}
-
-uint8_t exec_ADD(Registers *r, uint8_t value) {
-    uint8_t result = r->register_t[A] + value;    
-
-    return result; 
 }
 
 int main() {
@@ -180,7 +182,7 @@ int main() {
 
     set_bc(r, prova);
 
-    printf("%b %b\n", r->b, r->c);
+    printf("%b %b\n", r->register_t[B], r->register_t[C]);
 
     short ret = get_bc(r);
 
