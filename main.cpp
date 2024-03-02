@@ -105,6 +105,56 @@ uint8_t get_flag_register(FlagRegister *fr) {
     );
 }
 
+// Instruction set
+
+enum OPCode {
+    ADD,
+    ADDHL,
+    ADC,
+    SUB,
+    SBC,
+    AND,
+    OR,
+    XOR,
+    CP,
+    INC,
+    DEC,
+    CCF,
+    SCF,
+    RRA,
+    RLA,
+    RRCA,
+    RRLA,
+    CPL,
+    BIT,
+    RESET,
+    SET,
+    SRL,
+    RR,
+    RL,
+    RRC,
+    RLC,
+    SRA,
+    SLA,
+    SWAP
+};
+
+typedef struct Instruction {
+    OPCode opc;
+    char arithmetic_target;
+};
+
+void execute_instruction(Instruction *i) {
+    switch (i->opc) {
+        case :
+            /* code */
+            break;
+        
+        default:
+            break;
+    }
+}
+
 int main() {
     
     // Test high low decomp recomp val
