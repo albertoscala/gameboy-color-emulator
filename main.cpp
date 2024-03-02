@@ -92,6 +92,8 @@ void set_flag_register(FlagRegister *fr, uint8_t value) {
     fr->subtract = ((value >> SUBTRACT_FLAG_BYTE_POSITION) & 0b1) != 0;
     fr->half_carry = ((value >> HALF_CARRY_FLAG_BYTE_POSITION) & 0b1) != 0;
     fr->carry = ((value >> CARRY_FLAG_BYTE_POSITION) & 0b1) != 0;
+
+    cout << fr->zero << "\t" << fr->subtract << "\t" << fr->half_carry << "\t" << fr->carry << endl;
 }
 
 uint8_t get_flag_register(FlagRegister *fr) {
@@ -105,6 +107,8 @@ uint8_t get_flag_register(FlagRegister *fr) {
 
 int main() {
     
+    // Test high low decomp recomp val
+
     Registers *r = (Registers *) malloc(sizeof(Registers));
     
     short prova = 1922;
@@ -119,5 +123,19 @@ int main() {
 
     cout << (ret == prova) << endl;
     
+    // Test flag reg right value
+
+    uint8_t test = 0b10110000;
+
+    printf("test: %b\n", test);
+
+    FlagRegister *fr = (FlagRegister *) malloc(sizeof(FlagRegister));
+
+    set_flag_register(fr, test);
+
+    uint8_t test2 = get_flag_register(fr);
+
+    printf("test: %b\n", test2);
+
     return 0;
 }
