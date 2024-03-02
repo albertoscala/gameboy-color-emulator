@@ -4,7 +4,7 @@ using namespace std;
 typedef unsigned char uint8_t;
 
 // Defining 8-bits registers
-typedef struct registers {
+typedef struct Registers {
     uint8_t a;
     uint8_t b;
     uint8_t c;
@@ -13,6 +13,19 @@ typedef struct registers {
     uint8_t f;
     uint8_t h;
     uint8_t l;
+};
+
+// Defining flag register
+const uint8_t ZERO_FLAG_BYTE_POSITION       = 7;
+const uint8_t SUBTRACT_FLAG_BYTE_POSITION   = 6;
+const uint8_t HALF_CARRY_FLAG_BYTE_POSITION = 5;
+const uint8_t CARRY_FLAG_BYTE_POSITION      = 4;
+
+typedef struct FlagRegister {
+    bool zero;
+    bool subtract;
+    bool half_carry;
+    bool carry;
 };
 
 // Defining virtual 16-bits registers
@@ -34,47 +47,65 @@ unsigned short generic_get(uint8_t high, uint8_t low) {
 
 // AF
 
-void set_af(registers *r, unsigned short value) {
+void set_af(Registers *r, unsigned short value) {
     generic_set(&r->a, &r->f, value);
 }
 
-unsigned short get_af(registers *r) {
+unsigned short get_af(Registers *r) {
     return generic_get(r->a, r->f);
 }
 
 // BC
 
-void set_bc(registers *r, unsigned short value) {
+void set_bc(Registers *r, unsigned short value) {
     generic_set(&r->b, &r->c, value);
 }
 
-unsigned short get_bc(registers *r) {
+unsigned short get_bc(Registers *r) {
     return generic_get(r->b, r->c);
 }
 
 // DE
 
-void set_de(registers *r, unsigned short value) {
+void set_de(Registers *r, unsigned short value) {
     generic_set(&r->d, &r->e, value);
 }
 
-unsigned short get_de(registers *r) {
+unsigned short get_de(Registers *r) {
     return generic_get(r->d, r->e);
 }
 
 // HL
 
-void set_hl(registers *r, unsigned short value) {
+void set_hl(Registers *r, unsigned short value) {
     generic_set(&r->h, &r->l, value);
 }
 
-unsigned short get_hl(registers *r) {
+unsigned short get_hl(Registers *r) {
     return generic_get(r->h, r->l);
+}
+
+// 8-bit number flag register
+
+void set_flag_register(FlagRegister *fr, uint8_t value) {
+    fr->zero = ((value >> ZERO_FLAG_BYTE_POSITION) & 0b1) != 0;
+    fr->subtract = ((value >> SUBTRACT_FLAG_BYTE_POSITION) & 0b1) != 0;
+    fr->half_carry = ((value >> HALF_CARRY_FLAG_BYTE_POSITION) & 0b1) != 0;
+    fr->carry = ((value >> CARRY_FLAG_BYTE_POSITION) & 0b1) != 0;
+}
+
+uint8_t get_flag_register(FlagRegister *fr) {
+    return (
+        (fr->zero ? 1 : 0) << ZERO_FLAG_BYTE_POSITION | \
+        (fr->subtract ? 1 : 0) << SUBTRACT_FLAG_BYTE_POSITION | \
+        (fr->half_carry ? 1 : 0) << HALF_CARRY_FLAG_BYTE_POSITION | \
+        (fr->carry ? 1 : 0) << CARRY_FLAG_BYTE_POSITION
+    );
 }
 
 int main() {
     
-    registers *r = (registers *) malloc(sizeof(registers));
+    Registers *r = (Registers *) malloc(sizeof(Registers));
     
     short prova = 1922;
 
