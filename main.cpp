@@ -4,15 +4,20 @@ using namespace std;
 typedef unsigned char uint8_t;
 
 // Defining 8-bits registers
+
+enum Register {
+    A = 0,
+    B = 1,
+    C = 2,
+    D = 3,
+    E = 4,
+    F = 5,
+    H = 6,
+    L = 7
+};
+
 typedef struct Registers {
-    uint8_t a;
-    uint8_t b;
-    uint8_t c;
-    uint8_t d;
-    uint8_t e;
-    uint8_t f;
-    uint8_t h;
-    uint8_t l;
+    uint8_t register_t[8];
 };
 
 // Defining flag register
@@ -48,41 +53,41 @@ unsigned short generic_get(uint8_t high, uint8_t low) {
 // AF
 
 void set_af(Registers *r, unsigned short value) {
-    generic_set(&r->a, &r->f, value);
+    generic_set(&r->register_t[A], &r->register_t[F], value);
 }
 
 unsigned short get_af(Registers *r) {
-    return generic_get(r->a, r->f);
+    return generic_get(r->register_t[A], r->register_t[F]);
 }
 
 // BC
 
 void set_bc(Registers *r, unsigned short value) {
-    generic_set(&r->b, &r->c, value);
+    generic_set(&r->register_t[B], &r->register_t[C], value);
 }
 
 unsigned short get_bc(Registers *r) {
-    return generic_get(r->b, r->c);
+    return generic_get(r->register_t[B], r->register_t[C]);
 }
 
 // DE
 
 void set_de(Registers *r, unsigned short value) {
-    generic_set(&r->d, &r->e, value);
+    generic_set(&r->register_t[D], &r->register_t[E], value);
 }
 
 unsigned short get_de(Registers *r) {
-    return generic_get(r->d, r->e);
+    return generic_get(r->register_t[D], r->register_t[E]);
 }
 
 // HL
 
 void set_hl(Registers *r, unsigned short value) {
-    generic_set(&r->h, &r->l, value);
+    generic_set(&r->register_t[H], &r->register_t[L], value);
 }
 
 unsigned short get_hl(Registers *r) {
-    return generic_get(r->h, r->l);
+    return generic_get(r->register_t[H], r->register_t[L]);
 }
 
 // 8-bit number flag register
@@ -141,32 +146,15 @@ enum OPCode {
 
 typedef struct Instruction {
     OPCode opc;
-    char arithmetic_target;
+    Register arithmetic_target;
 };
 
 void execute_instruction(Registers *r, Instruction *i) {
     switch (i->opc) {
         case ADD:
-            switch (i->arithmetic_target) {
-                case "a":
-                    break;
-                case "b":
-                    break;
-                case "c":
-                    break;
-                case "d":
-                    break;
-                case "e":
-                    break;
-                case "f":
-                    break;
-                case "h":
-                    break;
-                case "l":
-                    break;
-            }
-
-
+            uint8_t value = r->register_t[i->arithmetic_target];
+            uint8_t result = exec_ADD(r, value);
+            r->register_t[A] = result;
             break;
         
         default:
@@ -175,7 +163,7 @@ void execute_instruction(Registers *r, Instruction *i) {
 }
 
 uint8_t exec_ADD(Registers *r, uint8_t value) {
-
+    uint8_t result = r->register_t[A] + value;    
 
     return result; 
 }
