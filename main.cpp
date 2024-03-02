@@ -144,15 +144,40 @@ typedef struct Instruction {
     char arithmetic_target;
 };
 
-void execute_instruction(Instruction *i) {
+void execute_instruction(Registers *r, Instruction *i) {
     switch (i->opc) {
-        case :
-            /* code */
+        case ADD:
+            switch (i->arithmetic_target) {
+                case "a":
+                    break;
+                case "b":
+                    break;
+                case "c":
+                    break;
+                case "d":
+                    break;
+                case "e":
+                    break;
+                case "f":
+                    break;
+                case "h":
+                    break;
+                case "l":
+                    break;
+            }
+
+
             break;
         
         default:
             break;
     }
+}
+
+uint8_t exec_ADD(Registers *r, uint8_t value) {
+
+
+    return result; 
 }
 
 int main() {
